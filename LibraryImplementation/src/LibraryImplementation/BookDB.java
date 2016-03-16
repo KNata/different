@@ -19,7 +19,7 @@ public class BookDB {
 
 	
 	   public void insertBook(Book aBook) throws ClassNotFoundException, SQLException {
-		   int bid = aBook.getBookId();
+		   String bid = aBook.getBookId();
 		   String bTitle = aBook.getBookTitle();
 		   double bPrice = aBook.getBookPrice();
 		   if (isBookWithThisIdStatus(bid)) {
@@ -40,17 +40,11 @@ public class BookDB {
 		   Connection conn = null;
 		   Statement stmt = null;
 		   Class.forName("com.mysql.jdbc.Driver");
-	       System.out.print("1");
 		   conn = DriverManager.getConnection(DB_URL, USER, PASS);
-	       System.out.print("1");
 		   stmt = conn.createStatement();
-	       System.out.print("1");
 		   String selectSQL = "SELECT * FROM Book";
-	       System.out.print("1");
-		   ResultSet rs = stmt.executeQuery(selectSQL);
-	       System.out.print("1");
+	       ResultSet rs = stmt.executeQuery(selectSQL);
 		   while (rs.next()) {
-		       System.out.print("2");
 			   int id  = rs.getInt("bid");
 		       String title = rs.getString("btitle");
 		       int price = rs.getInt("bprice");
@@ -63,26 +57,21 @@ public class BookDB {
 		   rs.close();
 	   }
 	   
-	   public int selectBookByTitle(String aTitle) throws ClassNotFoundException, SQLException {
+	   public String selectBookByTitle(String aTitle) throws ClassNotFoundException, SQLException {
 		   Connection conn = null;
 		   Statement stmt = null;
 		   int id = 0;
 		   String title = null;
 		   Class.forName("com.mysql.jdbc.Driver");
-	       System.out.print(" 1");
 		   conn = DriverManager.getConnection(DB_URL, USER, PASS);
-	       System.out.print(" 2");
 		   stmt = conn.createStatement();
-	       System.out.print(" 3");
 		   String selectSQL = "SELECT * FROM Book WHERE btitle = '" + aTitle + "'";
-	       System.out.print(" 4");
 		   ResultSet rs = stmt.executeQuery(selectSQL);
-	       System.out.print(" 5");
 		   while (rs.next()) {
 			    id  = rs.getInt("bid");
 		        title = rs.getString("btitle");
 		       int price = rs.getInt("bprice");
-		       if (!title.equals("")) {
+		       if (title.length() > 0) {
 		    	   System.out.print("Id: " + id);
 			       System.out.print(" title : " + title);
 			       System.out.print(" price: " + price);
@@ -91,54 +80,52 @@ public class BookDB {
 		         }
 		      }
 		   rs.close();
-		   if (title != null) {
-			   return id; 
+		   if (aTitle.equals(title)) {
+			   return title; 
 		   } else {
-			   return -1;
+			   return "This book is not in our library. Sorry.";
 		   }
 		   
 	   }
 	   
-	   public boolean isBookWithThisIdStatus(int anId) throws ClassNotFoundException, SQLException {
+	   public boolean isBookWithThisIdStatus(String anId) throws ClassNotFoundException, SQLException {
 		   Connection conn = null;
 		   Statement stmt = null;
-		   int id = 0;
+		   String id = null;
 		   Class.forName("com.mysql.jdbc.Driver");
 		   conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		   stmt = conn.createStatement();
-		   String selectSQL = "SELECT * FROM Book WHERE bid = '" + anId + "'" ;
+		   String selectSQL = "SELECT bid FROM Book WHERE bid = '" + anId + "'" ;
 		   ResultSet rs = stmt.executeQuery(selectSQL);
 		   while (rs.next()) {
-			   id  = rs.getInt("bid");		      
+			   id  = rs.getString("bid");		      
 		      }
 		    rs.close();
-		    if (id == anId) {
+		    if (anId.equals(id)) {
 		    	return true;
 		    } else {
 		    	return false;
 		    }
 	   }
 	   
-	  public void selectById(int anId) throws ClassNotFoundException, SQLException {
-			   Connection conn = null;
+	  public String selectBookById(String anId) throws ClassNotFoundException, SQLException {
+		  String id = null;  
+		  String title = null;
+		  	Connection conn = null;
 			   Statement stmt = null;
 			   Class.forName("com.mysql.jdbc.Driver");
 			   conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			   stmt = conn.createStatement();
-			   String selectSQL = "SELECT * FROM Book WHERE bid = '" + anId + "'" ;
+			   String selectSQL = "SELECT bid FROM Book WHERE bid = '" + anId + "'" ;
 			   ResultSet rs = stmt.executeQuery(selectSQL);
 			   while (rs.next()) {
-				   int id  = rs.getInt("bid");
-			       String title = rs.getString("btitle");
-			       int price = rs.getInt("bprice");
-			       if (!title.equals("")) {
-			    	   System.out.print("Id: " + id);
-				       System.out.print(" title : " + title);
-				       System.out.print(" price: " + price);
-			        } else {
-				       System.out.print("Book with title = " + anId + " is not in this library");
-			         }
-			      }
+				   id  = rs.getString("bid");
+			    }
 			    rs.close();
+			    if (anId.equals(id)) {
+			    	   return id;
+			     } else {
+				       return null;
+			     }
 		   }
 }		 

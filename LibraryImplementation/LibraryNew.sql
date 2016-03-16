@@ -13,13 +13,13 @@ create table Reader
   raddress char (30),
   rphone integer,
   rbirsday date not null,
-  rreadercard char not null,
+  rreadercard char(1000) not null,
   constraint reader primary key (rreadercard)
 );
 
 create table Book
 (
-bid integer not null,
+bid char(300) not null,
 btitle char(30),
 bprice integer,
 constraint book primary key (bid)
@@ -27,16 +27,22 @@ constraint book primary key (bid)
 
 create table TakeBook
 (
-bid integer not null,
-rreadercard integer not null,
-day DATE not null
+bid char(300) not null,
+rreadercard char(300) not null,
+day DATE not null,
+constraint reader primary key (rreadercard, bid, day),
+foreign key (bid) references book(bid),
+foreign key (rreadercard) references reader(rreadercard)
 );
 
 create table GetBook
 (
-bid integer not null,
-rreadercard integer not null,
-day DATE not null
+bid char(300) not null,
+rreadercard char(300) not null,
+day DATE not null,
+constraint reader primary key (rreadercard, bid, day),
+foreign key (bid) references Book(bid),
+foreign key (rreadercard) references Reader(rreadercard)
 );
 
 INSERT INTO Reader VALUES("Natalia Kiselyk", "Naukova str", 0938258539, "1994-08-19", 0123456);

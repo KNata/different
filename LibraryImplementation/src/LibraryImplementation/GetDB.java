@@ -20,13 +20,13 @@ public class GetDB {
 	
 	public void getBook(String aReaderCArd, String aBookkTitle) throws ClassNotFoundException, SQLException {
 		BookDB books = new BookDB();
-		int bookId = books.selectBookByTitle(aBookkTitle);
+		String bookId = books.selectBookById(aBookkTitle);
 		ReaderDB readers = new ReaderDB();
 		boolean readerIdStatus = readers.selectByIdStatus(aReaderCArd);
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");	
 		Date theDate = new Date();
 		String currentDate = dateFormat.format(theDate);
-		if ((readerIdStatus == true) && (bookId != -1)) {
+		if ((readerIdStatus == true) && (bookId != null)) {
 			Connection conn = null;
 			Statement stmt = null;
 			Class.forName("com.mysql.jdbc.Driver");
@@ -61,11 +61,9 @@ public class GetDB {
 	}
 
 	
-	public boolean getReaderBookFromLibraryStatus(String aReaderId) throws ClassNotFoundException, SQLException {
-		int bid = 0;
-		 String readercard = null;
-		 String date = null;
-		   Connection conn = null;
+	public boolean selectReaderByIdStatus(String aReaderId) throws ClassNotFoundException, SQLException {
+		String readercard = null;
+			Connection conn = null;
 		   Statement stmt = null;
 		   Class.forName("com.mysql.jdbc.Driver");
 		   conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -73,16 +71,19 @@ public class GetDB {
 		   String selectSQL = "SELECT * FROM GetBook WHERE rreadercard = ' " + aReaderId + "'";
 		   ResultSet rs = stmt.executeQuery(selectSQL);
 		   while (rs.next()) {
-			   bid  = rs.getInt("bid");
+			   String bid  = rs.getString("bid");
 		       readercard = rs.getString("rreadercard");
-		        date = rs.getString("day");
+		       String date = rs.getString("day");
+		       System.out.print("bid: " + bid);
+			   System.out.print(" Reader : " + readercard);
+			   System.out.print(" Date: " + date + "\n");
 		   }
 		   rs.close();
-		   if (readercard != null) {
+		   if (aReaderId.equals( readercard)) {
 			   return true;
 		   } else {
 			   return false;
 		   }
-	}
+	   }
 	
 }

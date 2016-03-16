@@ -2,17 +2,17 @@ package LibraryImplementation;
 
 public class Book {
 	
-	private int bookId;
+	private String bookId;
 	private String bookTitle;
 	private double bookPrice;
 	
-	Book(int aBookId, String  aBookTitle, double aBookPrice) {
+	Book(String aBookId, String  aBookTitle, double aBookPrice) {
 		bookId = aBookId;
 		bookTitle = aBookTitle;
 		bookPrice = aBookPrice;
 	}
 
-	public int getBookId() {
+	public String getBookId() {
 		return bookId;
 	}
 
