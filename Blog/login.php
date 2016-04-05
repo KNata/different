@@ -9,13 +9,21 @@
 	</head>
 	<body>
 <div class="alert alert-success">
-		<h2>Login Page</h2>
-		<a href="index.php">Return</a><br/><br/>
-		<form action="checklogin.php" method="post">
-			Username: <input type="text" name="username" required="required"/> <br/>
-			Password: <input type="password" name="password" required="required" /> <br/>
-			<input type="submit" value="Login"/>
-		</form>
+<legend><h2>Login Page</h2></legend>
+<fieldset>
+	<a href="index.php">Return</a><br/><br/>
+		<form action="checklogin.php" method="post" class ="form-inline" role = "form">
+
+<div class="form-group">
+Username: <input type="text" name="username" required="required"/> <br/><br/>
+Password: <input type="password" name="password" required="required" /> <br/>
+<input type="submit" value="Login"/>
+
+
+</div>
+					</form>
+</fieldset>
+empty($var)empty($var)
 </div>
 	</body>
 </html>
