@@ -1,22 +1,19 @@
 <html>
 	<head>
-		<title>My first PHP website</title>
+		<title>Blog</title>
 	</head>
 	<body>
-		<?php
-			echo "<p>Hello World!</p>";
-		?>
-		<a href="login.php">Click here to login</a> <br/>
-		<a href="register.php">Click here to register</a>
+		<a href="login.php">Login</a> <br/>
+		<a href="register.php">Register</a>
 	</body>
 	<br/>
-	<h2 align="center">List</h2>
+	<h2 align="center">Posts</h2>
 	<table width="100%" border="1px">
 			<tr>
 				<th>Id</th>
-				<th>Details</th>
-				<th>Post Time</th>
-				<th>Edit Time</th>
+				<th>Content</th>
+				<th>Date added</th>
+				<th>Date modified</th>
 			</tr>
 			<?php
 				mysql_connect("localhost", "root","root") or die(mysql_error()); //Connect to server

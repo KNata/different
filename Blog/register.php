@@ -1,13 +1,13 @@
 <html>
 	<head>
-		<title>My first PHP website</title>
+		<title>Blog</title>
 	</head>
 	<body>
-		<h2>Registration Page</h2>
-		<a href="index.php">Click here to go back</a><br/><br/>
+		<h2>Registration</h2>
+		<a href="index.php">Return</a><br/><br/>
 		<form action="register.php" method="post">
-			Enter Username: <input type="text" name="username" required="required"/> <br/>
-			Enter Password: <input type="password" name="password" required="required" /> <br/>
+			Username: <input type="text" name="username" required="required"/> <br/>
+			Password: <input type="password" name="password" required="required" /> <br/>
 			<input type="submit" value="Register"/>
 		</form>
 	</body>
@@ -19,26 +19,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$password = mysql_real_escape_string($_POST['password']);
     $bool = true;
 
-	mysql_connect("localhost", "root","root") or die(mysql_error()); //Connect to server
-	mysql_select_db("first_db") or die("Cannot connect to database"); //Connect to database
-	$query = mysql_query("Select * from users"); //Query the users table
-	while($row = mysql_fetch_array($query)) //display all rows from query
+	mysql_connect("localhost", "root","root") or die(mysql_error());
+	mysql_select_db("first_db") or die("Cannot connect to database");
+	$query = mysql_query("Select * from users");
+	while($row = mysql_fetch_array($query))
 	{
-		$table_users = $row['username']; // the first username row is passed on to $table_users, and so on until the query is finished
-		if($username == $table_users) // checks if there are any matching fields
-		{
-			$bool = false; // sets bool to false
-			Print '<script>alert("Username has been taken!");</script>'; //Prompts the user
-			Print '<script>window.location.assign("register.php");</script>'; // redirects to register.php
-		}
+		$table_users = $row['username'];
+        if($username == $table_users) {
+			$bool = false;
+			Print '<script>alert("Username has been taken!");</script>';
+			Print '<script>window.location.assign("register.php");</script>'; 		}
 	}
 
-	if($bool) // checks if bool is true
-	{
-		mysql_query("INSERT INTO users (username, password) VALUES ('$username','$password')"); //Inserts the value to table users
-		Print '<script>alert("Successfully Registered!");</script>'; // Prompts the user
-		Print '<script>window.location.assign("register.php");</script>'; // redirects to register.php
-	}
+	if($bool) {
+		mysql_query("INSERT INTO users (username, password) VALUES ('$username','$password')");  		Print '<script>alert("Successfully Registered!");</script>';
+		Print '<script>window.location.assign("register.php");</script>';
+    }
 
 }
 ?>

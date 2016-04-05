@@ -7,6 +7,12 @@
 -- Server version: 5.6.14
 -- PHP Version: 5.5.6
 
+create database if not exists Blog;
+use Blog;
+
+drop table if exists list;
+drop table if exists users;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -15,7 +21,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
 --
 -- Database: `first_db`
 --
