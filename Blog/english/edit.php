@@ -74,7 +74,7 @@
 						while($row = mysql_fetch_array($query)) {
 							Print "<tr>";
 								Print '<td align="center">'. $row['id'] . "</td>";
-								Print '<td align="center">'. $row['details'] . "</td>";
+								Print '<td align="center">'. $row['title'].$row['details'] . "</td>";
 								Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
 								Print '<td align="center">'. $row['date_edited']. " - ". $row['time_edited']. "</td>";
 								Print '<td align="center">'. $row['public']. "</td>";
@@ -121,7 +121,7 @@
 				$public = "yes";
 			}
 		}
-		mysql_query("UPDATE list SET details='$details', public='$public', date_edited='$date', time_edited='$time' WHERE id='$id'") ;
+		mysql_query("UPDATE list SET details='$title, $details', public='$public', date_edited='$date', time_edited='$time' WHERE id='$id'") ;
 
 		header("location: home.php");
 	}

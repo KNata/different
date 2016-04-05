@@ -33,6 +33,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
   `details` text NOT NULL,
   `date_posted` varchar(30) NOT NULL,
   `time_posted` time NOT NULL,

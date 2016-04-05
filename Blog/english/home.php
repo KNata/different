@@ -50,75 +50,70 @@
     $user = $_SESSION['user'];
     ?>
 <body>
-    <legend><h2>Home</h2></legend>
+<legend><h2>Home</h2></legend>
 
-    <label><p>Hello, <?php Print "$user"?>!</p></label>
-    <a href="logout.php">Logout</a><br/><br/>
-    <form action="add.php" method="POST">
-        <fieldset>
-        <legend>Add new post:</legend>
-        <label>Add post:</label>
-        <input type="text" placeholder="Type something…"name="details">
-        <span class="help-block">E.g. Today is sunny weather .</span>
-        public post? <input type="checkbox" name="public[]" value="yes"/><br/>
-        <input type="submit" value="Add to list"/>
-        </fieldset>
-    </form>
-
-    <fieldset>
-        <legend><h3 align="center">My posts</h3><legend>
-        <label> </label>
-        <table border="1px" width="100%">
-        <col width="130">
-        <col width="80">
-        <tr>
-        <th>Id</th>
-        <th>Details</th>
-        <th>Post Time</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th>Public Post</th>
-        </tr>
+<label><p>Hello, <?php Print "$user"?>!</p></label>
+<a href="logout.php">Logout</a><br/><br/>
+<form action="add.php" method="POST">
+<fieldset>
+<legend>Add new post:</legend>
+<label>Add post:</label>
+<input type="text" placeholder="Type something…"name="details">
+<span class="help-block">E.g. Today is sunny weather .</span>
+public post? <input type="checkbox" name="public[]" value="yes"/><br/>
+<input type="submit" value="Add to list"/>
 </fieldset>
-        <?php
+</form>
+
+<fieldset>
+<legend><h3 align="center">My posts</h3><legend>
+<label> </label>
+<table class="table">
+<col width="130">
+<col width="80">
+<tr>
+<th>Id</th>
+<th>Details</th>
+<th>Post Time</th>
+<th>Edit</th>
+<th>Delete</th>
+<th>Public Post</th>
+</tr>
+</fieldset>
+<?php
 				mysql_connect("localhost", "root","root") or die(mysql_error());
 				mysql_select_db("first_db") or die("Cannot connect to database");
 				$query = mysql_query("Select * from list");
 				while($row = mysql_fetch_array($query)) {
                     Print "<tr>";
                     Print '<td align="center">'. $row['id'] . "</td>";
-                    Print '<td align="center">'. $row['details'] .shortDescription($row['details'])."</td>";
+                    Print '<td align="center" >'. $row['details']."</td>";
                     Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
                     Print '<td align="center"><a href="edit.php?id='. $row['id'] .'">edit</a> </td>';
                     Print '<td align="center"><a href="#" onclick="myFunction('.$row['id'].')">delete</a> </td>';
                     Print '<td align="center">'. $row['public']. "</td>";
                     Print "</tr>";
                 }
-            ?>
-        </table>
+    ?>
+</table>
 
 
 <?php
     
-    function shortDescription($fullDescription) {
-        $shortDescription = ”;
+    function shorter($text, $chars_limit) {
+        $string = $text;
+        $string = strip_tags($string);
         
-        $fullDescription = trim(strip_tags($fullDescription));
-        
-        if ($fullDescription) {
-            $initialCount = 155;
-            if (strlen($fullDescription) > $initialCount) {
-                $shortDescription = substr($fullDescription,0,$initialCount)."...";
-            }
-            else {
-                return $fullDescription;
-            }
+        if (strlen($string) > 50) {
+            
+            // truncate string
+            $stringCut = substr($string, 0, 50);
+            
+            // make sure it ends in a word so assassinate doesn't become ass...
+            $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'... <a href="/this/story">Read More</a>';
         }
-        
-        return $shortDescription;
-    }
-    
-?>
+        echo $string;    }
+    ?>
 
 
 <script>
@@ -130,6 +125,8 @@ function myFunction(id)
         window.location.assign("delete.php?id=" + id);
     }
 }
+
+
 </script>
 </body>
 </html>

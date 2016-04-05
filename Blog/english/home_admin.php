@@ -50,26 +50,26 @@
     $user = $_SESSION['user'];
     ?>
 <body>
-    <legend><h2>Home</h2></legend>
+<legend><h2>Home</h2></legend>
 
-    <label><p>Hello, <?php Print "$user"?>!</p></label>
-    <a href="logout.php">Logout</a><br/><br/>
-    <form action="add.php" method="POST">
-        <fieldset>
-        <legend>Add new post:</legend>
-        <label>Add post:</label>
-        <input type="text" placeholder="Type something…"name="details">
-        <span class="help-block">E.g. Today is sunny weather .</span>
-        public post? <input type="checkbox" name="public[]" value="yes"/><br/>
-        <input type="submit" value="Add to list"/>
-        </fieldset>
-    </form>
+<label><p>Hello, <?php Print "$user"?>!</p></label>
+<a href="logout.php">Logout</a><br/><br/>
+<form action="add.php" method="POST">
+<fieldset>
+<legend>Add new post:</legend>
+<label>Add post:</label>
+<input type="text" placeholder="Type something…"name="details">
+<span class="help-block">E.g. Today is sunny weather .</span>
+public post? <input type="checkbox" name="public[]" value="yes"/><br/>
+<input type="submit" value="Add to list"/>
+</fieldset>
+</form>
 
 
 <fieldset>
 <legend><h3 align="center">Users</h3><legend>
 <label> </label>
-<table border="1px" width="100%">
+<table class="table">
 <col width="100">
 <col width="80">
 <tr>
@@ -89,7 +89,6 @@
                     Print '<td align="center">'. $row['username']."</td>";
                     Print '<td align="center"><a href="editUser.php?id='. $row['id'] .'">edit</a> </td>';
                     Print '<td align="center"><a href="#" onclick="deleteUser('.$row['id'].')">delete</a> </td>';
-
                     Print "</tr>";
                 }
     ?>
@@ -100,22 +99,22 @@
 <br/>
 
 
-    <fieldset>
-        <legend><h3 align="center">Posts</h3><legend>
-        <label> </label>
-        <table border="1px" width="100%">
-        <col width="130">
-        <col width="80">
-        <tr>
-        <th>Id</th>
-        <th>Details</th>
-        <th>Post Time</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th>Public Post</th>
-        </tr>
+<fieldset>
+<legend><h3 align="center">Posts</h3><legend>
+<label> </label>
+<table border="1px" width="100%">
+<col width="130">
+<col width="80">
+<tr>
+<th>Id</th>
+<th>Details</th>
+<th>Post Time</th>
+<th>Edit</th>
+<th>Delete</th>
+<th>Public Post</th>
+</tr>
 </fieldset>
-        <?php
+<?php
 				mysql_connect("localhost", "root","root") or die(mysql_error());
 				mysql_select_db("first_db") or die("Cannot connect to database");
 				$query = mysql_query("Select * from list");
@@ -129,8 +128,8 @@
                     Print '<td align="center">'. $row['public']. "</td>";
                     Print "</tr>";
                 }
-            ?>
-        </table>
+    ?>
+</table>
 
 
 <?php
@@ -153,7 +152,7 @@
         return $shortDescription;
     }
     
-?>
+    ?>
 
 
 <script>
@@ -165,7 +164,6 @@ function myFunction(id)
         window.location.assign("delete.php?id=" + id);
     }
 }
-
 function deleteUser(id)
 {
     var r = confirm("Are you sure you want to delete this user?");
