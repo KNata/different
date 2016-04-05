@@ -42,7 +42,7 @@
 </head>
 <?php
     session_start();
-    if($_SESSION['user']) {
+    if($_SESSION['admin']) {
     }
     else{
         header("location:index.php");
@@ -65,8 +65,43 @@
         </fieldset>
     </form>
 
+
+<fieldset>
+<legend><h3 align="center">Users</h3><legend>
+<label> </label>
+<table border="1px" width="100%">
+<col width="100">
+<col width="80">
+<tr>
+<th>Id</th>
+<th>Name</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</fieldset>
+<?php
+				mysql_connect("localhost", "root","root") or die(mysql_error());
+				mysql_select_db("first_db") or die("Cannot connect to database");
+				$query = mysql_query("Select * from users");
+				while($row = mysql_fetch_array($query)) {
+                    Print "<tr>";
+                    Print '<td align="center">'. $row['id'] . "</td>";
+                    Print '<td align="center">'. $row['username']."</td>";
+                    Print '<td align="center"><a href="editUser.php?id='. $row['id'] .'">edit</a> </td>';
+                    Print '<td align="center"><a href="#" onclick="deleteUser('.$row['id'].')">delete</a> </td>';
+
+                    Print "</tr>";
+                }
+    ?>
+</table>
+
+<br/>
+<br/>
+<br/>
+
+
     <fieldset>
-        <legend><h3 align="center">My posts</h3><legend>
+        <legend><h3 align="center">Posts</h3><legend>
         <label> </label>
         <table border="1px" width="100%">
         <col width="130">
@@ -128,6 +163,15 @@ function myFunction(id)
     if (r == true)
     {
         window.location.assign("delete.php?id=" + id);
+    }
+}
+
+function deleteUser(id)
+{
+    var r = confirm("Are you sure you want to delete this user?");
+    if (r == true)
+    {
+        window.location.assign("deleteUser.php?id=" + id);
     }
 }
 </script>

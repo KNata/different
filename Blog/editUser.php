@@ -41,7 +41,7 @@
 	</head>
 	<?php
 	session_start();
-	if($_SESSION['user'] || $_SESSION['admin']) {
+	if($_SESSION['admin']) {
 	}
 	else{
 		header("location:index.php");
@@ -53,31 +53,27 @@
 		<h2>Home</h2>
 		<p>Hello <?php Print "$user"?>!</p>
 		<a href="logout.php">Logout</a><br/>
-		<a href="home.php">Return</a>
+		<a href="home_admin.php">Return</a>
 		<h2 align="center">Currently Selected</h2>
 		<table border="1px" width="100%">
 			<tr>
 				<th>Id</th>
-				<th>Details</th>
-				<th>Post Time</th>
-				<th>Edit Time</th>
-				<th>Public Post</th>
+				<th>Name</th>
+				<th>Password</th>
 			</tr>
 			<?php
 				if(!empty($_GET['id'])) {
 					$id = $_GET['id'];
 					$_SESSION['id'] = $id;
 					$id_exists = true;
-                    mysql_connect("localhost", "root","root") or die(mysql_error()); 					mysql_select_db("first_db") or die("Cannot connect to database");					$query = mysql_query("Select * from list Where id='$id'");
+                    mysql_connect("localhost", "root","root") or die(mysql_error()); 					mysql_select_db("first_db") or die("Cannot connect to database");					$query = mysql_query("Select * from users Where id='$id'");
 					$count = mysql_num_rows($query);
 					if($count > 0) {
 						while($row = mysql_fetch_array($query)) {
 							Print "<tr>";
 								Print '<td align="center">'. $row['id'] . "</td>";
-								Print '<td align="center">'. $row['details'] . "</td>";
-								Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
-								Print '<td align="center">'. $row['date_edited']. " - ". $row['time_edited']. "</td>";
-								Print '<td align="center">'. $row['public']. "</td>";
+								Print '<td align="center">'. $row['username'] ."</td>";
+								Print '<td align="center">'. $row['password']."</td>";
 							Print "</tr>";
 						}
 					}
@@ -91,15 +87,14 @@
 		<?php
 		if ($id_exists) {
 		Print '
-		<form action="edit.php" method="POST">
-			Enter new detail: <input type="text" name="details"/><br/>
+		<form action="editUser.php" method="POST">
+            Enter new password: <input type="text" name="password"/><br/>
 			public post? <input type="checkbox" name="public[]" value="yes"/><br/>
-			<input type="submit" value="Update List"/>
+			<input type="submit" value="Update Password"/>
 		</form>
 		';
 		}
-		else
-		{
+		else {
 			Print '<h2 align="center">There is no data to be edited</h2>';
 		}
 		?>
@@ -113,16 +108,15 @@
 		$details = mysql_real_escape_string($_POST['details']);
 		$public = "no";
 		$id = $_SESSION['id'];
-		$time = strftime("%X");
-		$date = strftime("%B %d, %Y");
+		
 
 		foreach($_POST['public'] as $list) {
 			if($list != null) {
 				$public = "yes";
 			}
 		}
-		mysql_query("UPDATE list SET details='$details', public='$public', date_edited='$date', time_edited='$time' WHERE id='$id'") ;
+		mysql_query("UPDATE users SET password='$password' WHERE id='$id'") ;
 
-		header("location: home.php");
+		header("location: home_admin.php");
 	}
 ?>

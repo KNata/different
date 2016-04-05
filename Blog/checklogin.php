@@ -17,7 +17,15 @@
 		if(($username == $table_users) && ($password == $table_password)) {
 				if($password == $table_password) {
 					$_SESSION['user'] = $username;
-                    header("location: home.php"); 				}
+                    header("location: home.php");
+                }
+                    
+        } else if(($username == $table_users) && ($password == $table_password) && ($username == 'Admin')&& ($password == 'admin')) {
+            if($password == $table_password) {
+                $_SESSION['admin'] = $username;
+                header("location: home_admin.php");
+            }
+
 				
 		} else {
 			Print '<script>alert("Incorrect Password!");</script>';
