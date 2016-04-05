@@ -1,5 +1,10 @@
 <html>
 	<head>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
 		<title>Blog</title>
 	</head>
 	<body>
@@ -8,12 +13,11 @@
 	</body>
 	<br/>
 	<h2 align="center">Posts</h2>
-	<table width="100%" border="1px">
+	<table class="table table-bordered">
 			<tr>
-				<th>Id</th>
-				<th>Content</th>
-				<th>Date added</th>
-				<th>Date modified</th>
+				<th align="center">Id</th>
+				<th align="center">Content</th>
+				<th align="center">Date added</th>
 			</tr>
 			<?php
 				mysql_connect("localhost", "root","root") or die(mysql_error()); //Connect to server
@@ -25,9 +29,10 @@
 						Print '<td align="center">'. $row['id'] . "</td>";
 						Print '<td align="center">'. $row['details'] . "</td>";
 						Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
-						Print '<td align="center">'. $row['date_edited']. " - ". $row['time_edited']. "</td>";
 					Print "</tr>";
 				}
-			?>
+                
+                
+               			?>
 	</table>
 </html>
