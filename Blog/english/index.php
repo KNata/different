@@ -1,33 +1,3 @@
-<?php
-    if ($_SESSION[lang] == "") {
-        $_SESSION[lang] = "en";
-        $currLang = "en";
-    } else {
-        $currLang = $_GET[lang];
-        $_SESSION[lang] = $currLang;
-    }
-    switch($currLang) {
-        case "en":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "en");
-            break;
-        case "de":
-            define("CHARSET","ISO-8859-1");
-            define("LANGCODE", "de");
-            break;
-        case "uk":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "uk");
-            break;
-        default:
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "en");
-            break;
-    }
-    header("Content-Type: text/html;charset=".CHARSET);
-    header("Content-Language: ".LANGCODE);
-?>
-
 
 <html>
 <head>
@@ -44,6 +14,7 @@
 <body>
 <a href="login.php">Login</a>
 <a href="register.php">Register</a>
+<a href="loginAdmin.php">Admin</a>
 </body>
 <br/>
 <fieldset>

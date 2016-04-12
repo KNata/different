@@ -5,7 +5,7 @@
 
 	mysql_connect("localhost", "root","root") or die(mysql_error());
     mysql_select_db("first_db") or die("Cannot connect to database");
-	$query = mysql_query("SELECT * from users WHERE username='$username'");
+	$query = mysql_query("SELECT * from admin WHERE username='$username'");
     $exists = mysql_num_rows($query);
 	$table_users = "";
 	$table_password = "";
@@ -16,11 +16,11 @@
 		}
 		if(($username == $table_users) && ($password == $table_password)) {
 				if($password == $table_password) {
-					$_SESSION['user'] = $username;
-                    header("location: home.php");
-                }                    
-
-				
+					$_SESSION['admin'] = $username;
+                    header("location: home_admin.php");
+                }
+                    
+        				
 		} else {
 			Print '<script>alert("Incorrect Password!");</script>';
 			Print '<script>window.location.assign("login.php");</script>';

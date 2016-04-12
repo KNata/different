@@ -14,7 +14,7 @@
 <legend><h2>Login Page</h2></legend>
 <fieldset>
 	<a href="index.php">Return</a><br/><br/>
-		<form action="checklogin.php" method="post" class ="form-inline" role = "form">
+		<form action="checklogin_admin.php" method="post" class ="form-inline" role = "form">
 
 <div class="form-group">
 Username: <input type="text" name="username" required="required"/> <br/><br/>

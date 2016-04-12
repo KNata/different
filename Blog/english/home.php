@@ -1,33 +1,3 @@
-<?php
-    if ($_SESSION[lang] == "") {
-        $_SESSION[lang] = "en";
-        $currLang = "en";
-    } else {
-        $currLang = $_GET[lang];
-        $_SESSION[lang] = $currLang;
-    }
-    switch($currLang) {
-        case "en":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "en");
-            break;
-        case "de":
-            define("CHARSET","ISO-8859-1");
-            define("LANGCODE", "de");
-            break;
-        case "ja":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "ja");
-            break;
-        default:
-            define("CHARSET","ISO-8859-1");
-            define("LANGCODE", "en");
-            break;
-    }
-    header("Content-Type: text/html;charset=".CHARSET);
-    header("Content-Language: ".LANGCODE);
-    ?>
-
 
 <html>
 
@@ -72,7 +42,7 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
 <col width="130">
 <col width="80">
 <tr>
-<th>Id</th>
+<th>Title</th>
 <th>Details</th>
 <th>Post Time</th>
 <th>Edit</th>
@@ -86,8 +56,8 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
 				$query = mysql_query("Select * from list");
 				while($row = mysql_fetch_array($query)) {
                     Print "<tr>";
-                    Print '<td align="center">'. $row['id'] . "</td>";
-                    Print '<td align="center" >'. $row['details']."</td>";
+                   Print '<td align="center" >'. $row['title']."</td>";
+                    Print '<td align="center" <span class="more">>'. $row['details']."</span></td>";
                     Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
                     Print '<td align="center"><a href="edit.php?id='. $row['id'] .'">edit</a> </td>';
                     Print '<td align="center"><a href="#" onclick="myFunction('.$row['id'].')">delete</a> </td>';
@@ -127,6 +97,42 @@ function myFunction(id)
 }
 
 
+$(document).ready(function() {
+                  // Configure/customize these variables.
+                  var showChar = 100;  // How many characters are shown by default
+                  var ellipsestext = "...";
+                  var moretext = "Show less >";
+                  var lesstext = "Show more";
+                  
+                  
+                  $('.more').each(function() {
+                                  var content = $(this).html();
+                                  
+                                  if(content.length > showChar) {
+                                  
+                                  var c = content.substr(0, showChar);
+                                  var h = content.substr(showChar, content.length - showChar);
+                                  
+                                  var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+                                  
+                                  $(this).html(html);
+                                  }
+                                  
+                                  });
+                  
+                  $(".morelink").click(function(){
+                                       if($(this).hasClass("less")) {
+                                       $(this).removeClass("less");
+                                       $(this).html(moretext);
+                                       } else {
+                                       $(this).addClass("less");
+                                       $(this).html(lesstext);
+                                       }
+                                       $(this).parent().prev().toggle();
+                                       $(this).prev().toggle();
+                                       return false;
+                                       });
+                  });
 </script>
 </body>
 </html>
