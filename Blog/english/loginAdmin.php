@@ -11,7 +11,7 @@
 	</head>
 	<body>
 <div class="alert alert-success">
-<legend><h2>Login Page</h2></legend>
+<legend><h2>Are you admin?</h2></legend>
 <fieldset>
 	<a href="index.php">Return</a><br/><br/>
 		<form action="checklogin_admin.php" method="post" class ="form-inline" role = "form">

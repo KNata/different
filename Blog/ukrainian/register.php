@@ -1,57 +1,30 @@
-<?php
-    if ($_SESSION[lang] == "") {
-        $_SESSION[lang] = "en";
-        $currLang = "en";
-    } else {
-        $currLang = $_GET[lang];
-        $_SESSION[lang] = $currLang;
-    }
-    switch($currLang) {
-        case "en":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "en");
-            break;
-        case "de":
-            define("CHARSET","ISO-8859-1");
-            define("LANGCODE", "de");
-            break;
-        case "ja":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "ja");
-            break;
-        default:
-            define("CHARSET","ISO-8859-1");
-            define("LANGCODE", "en");
-            break;
-    }
-    header("Content-Type: text/html;charset=".CHARSET);
-    header("Content-Language: ".LANGCODE);
-    ?>
-
 <html>
 <head>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-
-
-<title>Блог</title>
-</head>
-<body>
-<legend><h2>Реєстрація</h2></legend>
+        <title>Блог</title>
+    </head>
+    <body>
+    <div class = "panel panel-danger">
+    <div class = "panel-heading">
+        <h2 class = "panel-title">Реєстрація</h2>
+    </div>
+<br/>
 <fieldset>
-
-<a href="index.php">Назад</a><br/><br/>
-<form action="register.php" method="post">
-Введіть логін:   <input type="text" name="username" required="required"/> <br/><br/>
-Введіть пароль:   <input type="password" name="password" required="required" /> <br/>
-<br>
-<input type="submit" value="Зареєструватися"/>
-</form>
-</fieldset>
+    <a href="index.php">Назад</a><br/><br/>
+    <form action="register.php" method="post">
+    Логін:   <input type="text" name="username" required="required"/> <br/><br/>
+    Пароль:   <input type="password" name="password" required="required" /> <br/>
+    <br>
+    <input type="submit" value="Зареєструватися"/>
+    </form>
+    </fieldset>
 </body>
 </html>
+
+
 
 <?php
     if($_SERVER["REQUEST_METHOD"] == "POST"){

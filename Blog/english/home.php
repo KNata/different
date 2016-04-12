@@ -18,36 +18,48 @@
         header("location:index.php");
     }
     $user = $_SESSION['user'];
-    ?>
+?>
 <body>
-<legend><h2>Home</h2></legend>
-
+<div class = "panel panel-success">
+<div class = "panel-heading">
+<h3 class = "panel-title"><h2>Home</h2></h3>
+</div>
+<div class = "panel-body">
 <label><p>Hello, <?php Print "$user"?>!</p></label>
 <a href="logout.php">Logout</a><br/><br/>
 <form action="add.php" method="POST">
 <fieldset>
-<legend>Add new post:</legend>
-<label>Add post:</label>
-<input type="text" placeholder="Type something…"name="details">
-<span class="help-block">E.g. Today is sunny weather .</span>
-public post? <input type="checkbox" name="public[]" value="yes"/><br/>
-<input type="submit" value="Add to list"/>
+<div class = "panel panel-info">
+<div class = "panel-heading">
+<h3 class = "panel-title">Add new post:</h3>
+</div>
+<br/>
+  <div class = "panel-body">
+    <label>   Add post:</label>
+    <input type="text" placeholder="Type something…"name="details">
+   <div id = "content"> <span class="help-block">   E.g. Today is sunny weather .</span></div>
+    public post? <input type="checkbox" name="public[]" value="yes"/><br/><br/>
+    <input type="submit" value="Add to list"/>
+</div>
 </fieldset>
 </form>
 
+
 <fieldset>
-<legend><h3 align="center">My posts</h3><legend>
-<label> </label>
+    <div class = "panel panel-warning">
+    <div class = "panel-heading">
+<h3 class = "panel-title">Posts</h3>
+</div>
+<div class = "panel-body">
 <table class="table">
 <col width="130">
 <col width="80">
 <tr>
-<th>Title</th>
-<th>Details</th>
-<th>Post Time</th>
-<th>Edit</th>
-<th>Delete</th>
-<th>Public Post</th>
+<th align="center", width = 100>Details</th>
+<th align="center", width = 30>Post Time</th>
+<th align="center", width = 30>Edit</th>
+<th align="center", width = 30>Delete</th>
+<th align="center", width = 30>Public Post</th>
 </tr>
 </fieldset>
 <?php
@@ -56,8 +68,7 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
 				$query = mysql_query("Select * from list");
 				while($row = mysql_fetch_array($query)) {
                     Print "<tr>";
-                   Print '<td align="center" >'. $row['title']."</td>";
-                    Print '<td align="center" <span class="more">>'. $row['details']."</span></td>";
+                    Print '<td align="center" <span class="more">'. $row['details']."</span></td>";
                     Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
                     Print '<td align="center"><a href="edit.php?id='. $row['id'] .'">edit</a> </td>';
                     Print '<td align="center"><a href="#" onclick="myFunction('.$row['id'].')">delete</a> </td>';
@@ -66,24 +77,8 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
                 }
     ?>
 </table>
+</div>
 
-
-<?php
-    
-    function shorter($text, $chars_limit) {
-        $string = $text;
-        $string = strip_tags($string);
-        
-        if (strlen($string) > 50) {
-            
-            // truncate string
-            $stringCut = substr($string, 0, 50);
-            
-            // make sure it ends in a word so assassinate doesn't become ass...
-            $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'... <a href="/this/story">Read More</a>';
-        }
-        echo $string;    }
-    ?>
 
 
 <script>
@@ -98,10 +93,9 @@ function myFunction(id)
 
 
 $(document).ready(function() {
-                  // Configure/customize these variables.
-                  var showChar = 100;  // How many characters are shown by default
+                  var showChar = 100;
                   var ellipsestext = "...";
-                  var moretext = "Show less >";
+                  var moretext = "Show less";
                   var lesstext = "Show more";
                   
                   
@@ -133,6 +127,19 @@ $(document).ready(function() {
                                        return false;
                                        });
                   });
+
+$(document).ready(function(v){
+                  var v = $("#content").text();
+                  
+                  $("#content").mouseover(function(){
+                                          $("#content").text("Your text");
+                                          });
+                  $("#content").mouseout(function(){
+                                         $("#content").text(v);
+                                         });
+                  });
+
 </script>
+</div>
 </body>
 </html>

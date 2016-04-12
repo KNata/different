@@ -1,34 +1,3 @@
-<?php
-    if ($_SESSION[lang] == "") {
-        $_SESSION[lang] = "en";
-        $currLang = "en";
-    } else {
-        $currLang = $_GET[lang];
-        $_SESSION[lang] = $currLang;
-    }
-    switch($currLang) {
-        case "en":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "en");
-            break;
-        case "de":
-            define("CHARSET","ISO-8859-1");
-            define("LANGCODE", "de");
-            break;
-        case "ja":
-            define("CHARSET","UTF-8");
-            define("LANGCODE", "ja");
-            break;
-        default:
-            define("CHARSET","ISO-8859-1");
-            define("LANGCODE", "en");
-            break;
-    }
-    header("Content-Type: text/html;charset=".CHARSET);
-    header("Content-Language: ".LANGCODE);
-    ?>
-
-
 <html>
 
 <head>
@@ -50,34 +19,47 @@
     $user = $_SESSION['user'];
     ?>
 <body>
-<legend><h2>Кабінет адміністратора</h2></legend>
+    <div class = "panel panel-success">
+    <div class = "panel-heading">
+    <h3 class = "panel-title"><h2>Кабінет адміна</h2></h3>
+    </div>
 
-<label><p>Привіт, <?php Print "$user"?>!</p></label>
-<a href="logout.php">Вийти з системи</a><br/><br/>
-<form action="add.php" method="POST">
+    <div class = "panel-body">
+    <label><p>Hello, <?php Print "$user"?>!</p></label>
+    <a href="logout.php">Вийти</a><br/><br/>
+    <form action="add.php" method="POST">
+
 <fieldset>
-<legend>Додати новий пост:</legend>
-<label>Введіть текст:</label>
-<input type="text" placeholder="Type something…"name="details">
-<span class="help-block">Наприклад, Сьогодні чудова погода.</span>
-public post? <input type="checkbox" name="public[]" value="yes"/><br/>
-<input type="submit" value="Додати"/>
+    <div class = "panel panel-info">
+    <div class = "panel-heading">
+        <h3 class = "panel-title">Додати нову публікацію:</h3>
+    </div>
+    <br/>
+    <div class = "panel-body">
+        <label>Add post:</label>
+        <input type="text" placeholder="Напиши щось…"name="details">
+         <div id = "content"><span class="help-block">Наприклад, сьогодні сонячна погода.</span></div>
+        Загальнодостепний пост? <input type="checkbox" name="public[]" value="yes"/><br/>
+        <input type="submit" value="Add to list"/>
+    </div>
 </fieldset>
 </form>
 
 
 <fieldset>
-<legend><h3 align="center">Користувачі</h3><legend>
-<label> </label>
-<table border="1px" width="100%">
+<div class = "panel panel-warning">
+<div class = "panel-headin"><h3>Користувачі</h3>
+</div>
+<div class = "panel-body">
+<table class="table">
 <col width="100">
 <col width="80">
 <tr>
-<th>Порядковий номер</th>
-<th>Ім'я'</th>
-<th>Редагувати</th>
-<th>Видалити</th>
+<th>Логін</th>
+    <th>Редагувати</th>
+    <th>Видалити</th>
 </tr>
+</div>
 </fieldset>
 <?php
 				mysql_connect("localhost", "root","root") or die(mysql_error());
@@ -85,7 +67,6 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
 				$query = mysql_query("Select * from users");
 				while($row = mysql_fetch_array($query)) {
                     Print "<tr>";
-                    Print '<td align="center">'. $row['id'] . "</td>";
                     Print '<td align="center">'. $row['username']."</td>";
                     Print '<td align="center"><a href="editUser.php?id='. $row['id'] .'">редагувати</a> </td>';
                     Print '<td align="center"><a href="#" onclick="deleteUser('.$row['id'].')">видалити</a> </td>';
@@ -93,26 +74,27 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
                 }
     ?>
 </table>
-
+</div>
 <br/>
 <br/>
 <br/>
 
 
 <fieldset>
-<legend><h3 align="center">Posts</h3><legend>
-<label> </label>
-<table class="table">
-<col width="130">
-<col width="80">
-<tr>
-<th>Порядковий номер</th>
-<th>Детальніше</th>
-<th>Час публікації</th>
-<th>Редагувати</th>
-<th>Видалити</th>
-<th>Загальнодоступний пост</th>
-</tr>
+<div class = "panel panel-primary">
+<div class = "panel-heading">
+<h3 class = "panel-title"><h3>Публікації</h3></h3>
+</div>
+
+<div class = "panel-body">
+    <table class="table">
+    <tr>
+    <th width = 100>Деталі</th>
+    <th width = 30>Час публікації</th>
+    <th width = 30>Редагувати</th>
+    <th width = 30>Видалити</th>
+    <th width = 30>Загальнодоступний пост</th>
+    </tr>
 </fieldset>
 <?php
 				mysql_connect("localhost", "root","root") or die(mysql_error());
@@ -120,8 +102,7 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
 				$query = mysql_query("Select * from list");
 				while($row = mysql_fetch_array($query)) {
                     Print "<tr>";
-                    Print '<td align="center">'. $row['id'] . "</td>";
-                    Print '<td align="center">'. $row['details'] .shortDescription($row['details'])."</td>";
+                    Print '<td align="center" <span class="more">'. $row['details']."</span></td>";
                     Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
                     Print '<td align="center"><a href="edit.php?id='. $row['id'] .'">редагувати</a> </td>';
                     Print '<td align="center"><a href="#" onclick="myFunction('.$row['id'].')">видалити</a> </td>';
@@ -130,48 +111,77 @@ public post? <input type="checkbox" name="public[]" value="yes"/><br/>
                 }
     ?>
 </table>
+</div>
 
-
-<?php
-    
-    function shortDescription($fullDescription) {
-        $shortDescription = ”;
-        
-        $fullDescription = trim(strip_tags($fullDescription));
-        
-        if ($fullDescription) {
-            $initialCount = 155;
-            if (strlen($fullDescription) > $initialCount) {
-                $shortDescription = substr($fullDescription,0,$initialCount)."...";
-            }
-            else {
-                return $fullDescription;
-            }
-        }
-        
-        return $shortDescription;
-    }
-    
-    ?>
 
 
 <script>
 function myFunction(id)
 {
-    var r = confirm("Are you sure you want to delete this record?");
+    var r = confirm("Ти впевнений що хочеш видалити цей запис?");
     if (r == true)
     {
         window.location.assign("delete.php?id=" + id);
     }
 }
+
 function deleteUser(id)
 {
-    var r = confirm("Are you sure you want to delete this user?");
+    var r = confirm("Ти впевнений що хочеш видалити цього користувача?");
     if (r == true)
     {
         window.location.assign("deleteUser.php?id=" + id);
     }
 }
+
+$(document).ready(function() {
+                  var showChar = 100;
+                  var ellipsestext = "...";
+                  var moretext = "Show less";
+                  var lesstext = "Show more";
+                  
+                  
+                  $('.more').each(function() {
+                                  var content = $(this).html();
+                                  
+                                  if(content.length > showChar) {
+                                  
+                                  var c = content.substr(0, showChar);
+                                  var h = content.substr(showChar, content.length - showChar);
+                                  
+                                  var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+                                  
+                                  $(this).html(html);
+                                  }
+                                  
+                                  });
+                  
+                  $(".morelink").click(function(){
+                                       if($(this).hasClass("less")) {
+                                       $(this).removeClass("less");
+                                       $(this).html(moretext);
+                                       } else {
+                                       $(this).addClass("less");
+                                       $(this).html(lesstext);
+                                       }
+                                       $(this).parent().prev().toggle();
+                                       $(this).prev().toggle();
+                                       return false;
+                                       });
+                  });
+
+$(document).ready(function(v){
+                  var v = $("#content").text();
+                  
+                  $("#content").mouseover(function(){
+                                          $("#content").text("Ваш приклад");
+                                          });
+                  $("#content").mouseout(function(){
+                                         $("#content").text(v);
+                                         });
+                  });
+
 </script>
+</div>
 </body>
 </html>

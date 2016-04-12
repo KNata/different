@@ -1,4 +1,3 @@
-
 <html>
 
 <head>
@@ -19,71 +18,69 @@
     }
     $user = $_SESSION['user'];
     ?>
+
 <body>
-<legend><h2>Home</h2></legend>
 
-<label><p>Hello, <?php Print "$user"?>!</p></label>
-<a href="logout.php">Logout</a><br/><br/>
-<form action="add.php" method="POST">
-<fieldset>
-<legend>Add new post:</legend>
-<label>Add post:</label>
-<input type="text" placeholder="Type something…"name="details">
-<span class="help-block">E.g. Today is sunny weather .</span>
-public post? <input type="checkbox" name="public[]" value="yes"/><br/>
-<input type="submit" value="Add to list"/>
-</fieldset>
-</form>
+    <div class = "panel panel-info">
+    <div class = "panel-heading">
+        <h3 class = "panel-title">Кабінет користувача</h3>
+    </div>
+    <div class = "panel-body">
+    <label><p>Привіт, <?php Print "$user"?>!</p></label>
+    <a href="logout.php">Вийти з системи</a><br/><br/>
 
-<fieldset>
-<legend><h3 align="center">My posts</h3><legend>
-<label> </label>
-<table class="table">
-<col width="130">
-<col width="80">
-<tr>
-<th>Title</th>
-<th>Details</th>
-<th>Post Time</th>
-<th>Edit</th>
-<th>Delete</th>
-<th>Public Post</th>
-</tr>
-</fieldset>
+    <div class = "panel panel-success">
+    <div class = "panel-heading">
+        <h3 class = "panel-title">Додати новий пост</h3>
+    </div>
+
+    <div class = "panel-body">
+        <form action="add.php" method="POST">
+        <fieldset>
+            <label>Введіть текст:</label>
+            <input type="text" placeholder="Введіть щось…"name="details">
+           <div id = "content"> <span class="help-block">Наприклад, Сьогодні чудова погода .</span></div>
+            Загальнодоступний пост? <input type="checkbox" name="public[]" value="yes"/><br/>
+            <br/>
+            <input type="submit" value="Додати"/>
+        </fieldset>
+        </form>
+    </div>
+    </div>
+
+    <div class = "panel panel-warning">
+    <div class = "panel-heading">
+        <h3 class = "panel-title">Мої пости</h3>
+    </div>
+
+    <div class = "panel-body">
+    <fieldset>
+        <table class="table">
+        <tr>
+        <th width="100">Детальніше</th>
+        <th width="30">Час публікації</th>
+        <th width="30">Редагувати</th>
+        <th width="30">Видалити</th>
+        <th width="30">Загальнодоступний пост</th>
+        </tr>
+    </fieldset>
 <?php
 				mysql_connect("localhost", "root","root") or die(mysql_error());
 				mysql_select_db("first_db") or die("Cannot connect to database");
 				$query = mysql_query("Select * from list");
 				while($row = mysql_fetch_array($query)) {
                     Print "<tr>";
-                   Print '<td align="center" >'. $row['title']."</td>";
-                    Print '<td align="center" <span class="more">>'. $row['details']."</span></td>";
+                    Print '<td align="center" <span class="more">'. $row['details']."</span></td>";
                     Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
-                    Print '<td align="center"><a href="edit.php?id='. $row['id'] .'">edit</a> </td>';
-                    Print '<td align="center"><a href="#" onclick="myFunction('.$row['id'].')">delete</a> </td>';
+                    Print '<td align="center"><a href="edit.php?id='. $row['id'] .'">редагувати</a> </td>';
+                    Print '<td align="center"><a href="#" onclick="myFunction('.$row['id'].')">видалити</a> </td>';
                     Print '<td align="center">'. $row['public']. "</td>";
                     Print "</tr>";
                 }
     ?>
 </table>
-
-
-<?php
-    
-    function shorter($text, $chars_limit) {
-        $string = $text;
-        $string = strip_tags($string);
-        
-        if (strlen($string) > 50) {
-            
-            // truncate string
-            $stringCut = substr($string, 0, 50);
-            
-            // make sure it ends in a word so assassinate doesn't become ass...
-            $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'... <a href="/this/story">Read More</a>';
-        }
-        echo $string;    }
-    ?>
+</div>
+</div>
 
 
 <script>
@@ -96,13 +93,11 @@ function myFunction(id)
     }
 }
 
-
 $(document).ready(function() {
-                  // Configure/customize these variables.
-                  var showChar = 100;  // How many characters are shown by default
+                  var showChar = 100;
                   var ellipsestext = "...";
-                  var moretext = "Менше>";
-                  var lesstext = "Більше";
+                  var moretext = "Show less";
+                  var lesstext = "Show more";
                   
                   
                   $('.more').each(function() {
@@ -133,6 +128,22 @@ $(document).ready(function() {
                                        return false;
                                        });
                   });
+
+$(document).ready(function(v){
+                  var v = $("#content").text();
+                  
+                  $("#content").mouseover(function(){
+                                          $("#content").text("Ваш приклад");
+                                          });
+                  $("#content").mouseout(function(){
+                                         $("#content").text(v);
+                                         });
+                  });
+
+
+
 </script>
+</div>
+</div>
 </body>
 </html>
