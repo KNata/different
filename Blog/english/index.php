@@ -44,24 +44,56 @@
 				while($row = mysql_fetch_array($query))
 				{
                     Print "<tr>";
-                    Print '<td align="center">'. $row['title'].$row['details'] . "</td>";
-                    Print '<td align="center">'. $row['date_posted']. " - ". $row['time_posted']."</td>";
+                    Print '<td align="center" width = 200><span class="more">'. $row['title'].$row['details'] . "</span></td>";
+                    Print '<td align="center", width = 40>'. $row['date_posted']. " - ". $row['time_posted']."</td>";
                     Print "</tr>";
                 }
     
     
-    function shorter($text, $chars_limit) {
-        $string = $text;
-        $string = strip_tags($string);
-        
-        if (strlen($string) > 50) {
-            $stringCut = substr($string, 0, 50);
-            $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'... <a href="/this/story">Read More</a>';
-        }
-        echo $string;
-    }
-
+    
     
     ?>
+
+
 </table>
+
+
+<script>
+$(document).ready(function() {
+                  // Configure/customize these variables.
+                  var showChar = 100;  // How many characters are shown by default
+                  var ellipsestext = "...";
+                  var moretext = "Show less >";
+                  var lesstext = "Show more";
+                  
+                  
+                  $('.more').each(function() {
+                                  var content = $(this).html();
+                                  
+                                  if(content.length > showChar) {
+                                  
+                                  var c = content.substr(0, showChar);
+                                  var h = content.substr(showChar, content.length - showChar);
+                                  
+                                  var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+                                  
+                                  $(this).html(html);
+                                  }
+                                  
+                                  });
+                  
+                  $(".morelink").click(function(){
+                                       if($(this).hasClass("less")) {
+                                       $(this).removeClass("less");
+                                       $(this).html(moretext);
+                                       } else {
+                                       $(this).addClass("less");
+                                       $(this).html(lesstext);
+                                       }
+                                       $(this).parent().prev().toggle();
+                                       $(this).prev().toggle();
+                                       return false;
+                                       });
+                  });
+</script>
 </html>
