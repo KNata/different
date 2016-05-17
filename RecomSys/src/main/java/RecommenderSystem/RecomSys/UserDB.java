@@ -77,28 +77,5 @@ public class UserDB {
 			   }
 	}
 	
-	
-	// user can edit his password
-	
-	public boolean editUserInfo(User aUser, String aPassword) throws ClassNotFoundException, SQLException {
-		if (aUser == null) {
-			  return false;
-		  } else {
-			  Connection conn = null;
-			  Statement stmt = null;
-			  Class.forName("com.mysql.jdbc.Driver");
-			  conn = DriverManager.getConnection(DB_URL, LOGIN, PASSWORD);
-			  stmt = conn.createStatement();
-			  String updateSQL = "UPDATE User SET userPassword = '?' WHERE userId = '?'";
-			  PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(updateSQL);
-				preparedStatement.setInt(1, aUser.getUserId());
-				preparedStatement.setString(2, aPassword);
-			  stmt.executeUpdate(updateSQL);
-			  System.out.println("Done");
-		  }
 		
-		return true;
-	}
-	
-	
 }
