@@ -15,6 +15,8 @@ import java.util.TreeSet;
 
 public class App {
     
+    private static final int MAX_FILM_COUNT = 5;
+    
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         System.out.println("Enter your login: ");
         Scanner scan= new Scanner(System.in);
@@ -53,7 +55,7 @@ public class App {
             System.out.println("Загальний випадок");
             System.out.println(" Відстань Евкліда");
             System.out.println("");
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < MAX_FILM_COUNT; i++) {
                 System.out.println(i+1 + ". " + entryList.get(i).getKey() );
             }
             System.out.println("");
@@ -71,7 +73,7 @@ public class App {
                 }
             });
             
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < MAX_FILM_COUNT; i++) {
                 System.out.println(i+1 + ". " + entryList1.get(i).getKey());
             }
             
