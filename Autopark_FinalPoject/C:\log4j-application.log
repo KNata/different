@@ -1,0 +1,4 @@
+2018-12-19 01:10:07 ERROR DriverDAO:93 - Unknown column 'visitorID' in 'where clause'
+2018-12-21 16:12:39 ERROR BusDAO:51 - Data truncation: Out of range value for column 'maintance' at row 1
+2018-12-21 16:14:09 ERROR BusDAO:52 - Data truncation: Out of range value for column 'maintance' at row 1
+2018-12-21 16:15:22 ERROR BusDAO:52 - Data truncation: Out of range value for column 'maintance' at row 1

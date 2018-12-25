@@ -1,0 +1,19 @@
+.btn btn-danger btn-lg btn-block{
+    padding-top:100px;
+}
+
+h2 {
+    text-align: center;
+    font: American Typewriter;
+}
+
+body {
+  background-color: url(https://www.google.com.ua/imgres?imgurl=https%3A%2F%2Fpreviews.123rf.com%2Fimages%2Fbakhtiarzein%2Fbakhtiarzein1512%2Fbakhtiarzein151200042%2F49817628-bus-station-stop-busy-people-crowd-transport-city-street-vector.jpg&imgrefurl=https%3A%2F%2Fwww.123rf.com%2Fphoto_49817628_stock-vector-bus-station-stop-busy-people-crowd-transport-city-street-vector.html&docid=Ak1LxBs4EI5DPM&tbnid=OSYs_p15FiSfhM%3A&vet=10ahUKEwjCg_bH76LfAhVp_SoKHdDCCaEQMwh1KCowKg..i&w=1300&h=779&bih=661&biw=1253&q=bus%20station%20vector%20image&ved=0ahUKEwjCg_bH76LfAhVp_SoKHdDCCaEQMwh1KCowKg&iact=mrc&uact=8);
+    
+}
+
+.container{
+    max-height: inherit;
+    max-width: 600;
+    padding-top: 10px;
+}

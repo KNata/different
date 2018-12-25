@@ -1,0 +1,15 @@
+.container {
+    position: absolute;
+    max-height: inherit;
+    max-width: inherit;
+}
+
+.col {
+    background-color: aliceblue;
+    
+}
+
+.col-8 {
+    background-color: blanchedalmond;
+}
+
