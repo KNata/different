@@ -9,67 +9,20 @@
 
 <div class="container">
 
-    <div class="container">
-        <div class="container">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="index.jsp">About Autopark</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item ">
-                                <a class="nav-link" href="#">Routes</a>
-                            </li>
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Buses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Drivers</a>
-                            </li>
+    <h2><fmt:message key="admin.see.buses" bundle="${rb}"/></h2>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Visitors</a>
-                            </li>
-                        </ul>
-                        <div align="right">
-                            <jsp:useBean id="now" class="java.util.Date" />
-                            <fmt:setLocale value="us-US"/>
-                            <fmt:formatDate value="${now}"/>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
-
-    <h2>Buses</h2>
-    <!--Search Form -->
-    <form action="/BusServlet" method="get" id="seachBusForm" role="form">
-        <input type="hidden" id="searchAction" name="searchAction" value="searchByName">
-        <div class="form-group col-xs-5">
-            <input type="text" name="busName" id="busName" class="form-control" required="true" placeholder="Type the Name of the bus"/>
-        </div>
-        <button type="submit" class="btn btn-info">
-            <span class="glyphicon glyphicon-search"></span> Search
-        </button>
-    </form>
-
-    <form action="/BusServlet" method="post" id="busForm" role="form" >
-        <input type="hidden" id="idBus" name="idBus">
-        <input type="hidden" id="action" name="action">
+    <form action="/BusServlet" method="get" id="busForm" role="form" >
         <c:choose>
             <c:when test="${not empty busList}">
                 <table  class="table table-striped">
-                    <thead>
+                    <thead>${action}
                     <tr>
-                        <td>Bus ID: </td>
-                        <td>Bus Model: </td>
-                        <td>Max Count Of Passangers: </td>
-                        <td>Miles: </td>
-                        <td>Passed Servise? </td>
+                        <td><strong><fmt:message key="admin.add.bus.busID" bundle="${rb}"/>: </strong> </td>
+                        <td><strong><fmt:message key="admin.add.bus.model" bundle="${rb}"/>: </strong></td>
+                        <td><strong><fmt:message key="admin.add.bus.maxPass" bundle="${rb}"/>: </strong></td>
+                        <td><strong><fmt:message key="admin.add.bus.miles" bundle="${rb}"/>: </strong></td>
+                        <td><strong><fmt:message key="admin.add.bus.service" bundle="${rb}"/>? </strong></td>
                     </tr>
                     </thead>
                     <c:forEach var="bus" items="${busList}">
@@ -78,43 +31,36 @@
                             <c:set var="classSucess" value="info"/>
                         </c:if>
                         <tr class="${classSucess}">
-                            <td>
-                                <a href="/BusServlet?idBus=${bus.busID}&searchAction=searchById">${bus.busID}</a>
-                            </td>
+
                             <td>${bus.busID}</td>
                             <td>${bus.busModel}</td>
-                            <td>${bus.maxCountOfPassangers}</td>
+                            <td>${bus.maxCountOfPassagers}</td>
                             <td>${bus.miles}</td>
                             <td>${bus.passedService}</td>
-
-                            <td><a href="#" id="remove"
-                                   onclick="document.getElementById('action').value = 'remove';document.getElementById('idBus').value = '${bus.busID}';
-
-                                           document.getElementById('busForm').submit();">
-                                <span class="glyphicon glyphicon-trash"/>
-                            </a>
 
                             </td>
                         </tr>
                     </c:forEach>
                 </table>
             </c:when>
-            <c:otherwise>
-                <br>
-                <div class="alert alert-info">
-                    No bus found matching your search criteria
-                </div>
-            </c:otherwise>
         </c:choose>
     </form>
     <br>
-        <a href="addNewBusPage.jsp"><button type="submit" class="btn btn-secondary btn-md">New Bus</button></a>
-        <a href="adminMainPage.jsp"><button type="submit" class="btn btn-primary  btn-md">Back to main page</button></a>
+    <br>
+    <a href="/views/adminView/addNewBusPage.jsp"><button type="submit" class="btn btn-secondary btn-md"><fmt:message key="admin.new.bus" bundle="${rb}"/></button></a>
+    <a href="/views/adminView/editBus.jsp"><button type="submit" class="btn btn-primary btn-md"><fmt:message key="admin.edit.bus" bundle="${rb}"/></button></a>
+    <a href="/views/adminView/deleteBus.jsp"><button type="submit" class="btn btn-secondary btn-md"><fmt:message key="admin.delete.bus" bundle="${rb}"/></button></a>
 
-        <br>
-        <br>
-        <form action="${pageContext.request.contextPath}/LogoutServlet" method="post">
-             <button type="submit" class="btn btn-success btn-md">Logout</button>
-        </form>
+    <br>
+    <br>
+
+    <a href="/views/adminView/adminMainPage.jsp"><button type="submit" class="btn btn-primary  btn-md"><fmt:message key="back.to.main.page" bundle="${rb}"/></button></a>
+
+
+    <br>
+    <br>
+    <form action="${pageContext.request.contextPath}/LogoutServlet" method="post">
+        <button type="submit" class="btn btn-success btn-md"><fmt:message key="logout.button" bundle="${rb}"/></button>
+    </form>
 </div>
 <%@include file="/views/commonView/footer.jsp"%>

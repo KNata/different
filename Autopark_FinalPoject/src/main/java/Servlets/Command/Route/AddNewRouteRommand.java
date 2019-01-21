@@ -45,12 +45,12 @@ public class AddNewRouteRommand implements Command {
             BusDAO busDAO = new BusDAO();
             DriverDAO driverDAO = new DriverDAO();
             if (busDAO.findByID(busID) != null && driverDAO.isDriverInSystem(driverID)) {
-                if(routeDAO.findByID(routeID) == null && (routeDAO.findByID(routeID).getRouteStartTime() != departureTimeInDateFormat) && (routeDAO.findByID(routeID).getDriverID() != driverID)) {
+                if(routeDAO.findByID(routeID) == null && (!routeDAO.findByID(routeID).getRouteStartTime().equals(departureTime)) && (routeDAO.findByID(routeID).getDriverID() != driverID)) {
                     Driver theDriver = driverDAO.findByID(driverID);
                     Bus theBus = busDAO.findByID(busID);
-                    Route theRoute = Route.newBuilder().setRouteID(Integer.valueOf(routeID)).setRouteTitle(routeTitle).setBus(theBus.getBusID())
-                            .setDriver(theDriver.getDriverID()).setRouteBegin(cityOfDeparture).setRouteEnd(cityOfArrival)
-                            .setRouteDuration(Integer.valueOf(routeDuration)).setRouteStartTime(departureTimeInDateFormat).setRouteEndTime(arrivalTimeInDateFormat).build();
+                    Route theRoute = Route.newBuilder().setRouteID(Integer.valueOf(routeID)).setRouteTitle(routeTitle).setBusID(busID)
+                            .setDriver(driverID).setRouteBegin(cityOfDeparture).setRouteEnd(cityOfArrival)
+                            .setRouteDuration(Integer.valueOf(routeDuration)).setRouteStartTime(departureTime).setRouteEndTime(arrivalTime).build();
                     boolean wasAdded = routeDAO.addRecord(theRoute);
                     if (wasAdded) {
                         request.getRequestDispatcher("/views/commonView/successPage.jsp").forward(request, responce);

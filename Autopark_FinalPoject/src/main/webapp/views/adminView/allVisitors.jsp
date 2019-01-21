@@ -9,41 +9,7 @@
 
 <div class="container">
 
-    <div class="container">
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="index.jsp">About Autopark</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item ">
-                            <a class="nav-link" href="#">Routes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Buses</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Drivers</a>
-                        </li>
-
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Visitors</a>
-                        </li>
-                    </ul>
-                    <div align="right">
-                        <jsp:useBean id="now" class="java.util.Date" />
-                        <fmt:setLocale value="us-US"/>
-                        <fmt:formatDate value="${now}"/>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </div>
-    <h2>Visitor</h2>
     <!--Search Form -->
     <form action="/VisitorServlet" method="get" id="seachVisitorForm" role="form">
         <input type="hidden" id="searchAction" name="searchAction" value="searchByName">
@@ -52,9 +18,11 @@
                    placeholder="Type the Name of the Visitor"/>
         </div>
         <button type="submit" class="btn btn-info">
-             Search
+            <fmt:message key="search.button" bundle="${rb}"/>
         </button>
     </form>
+
+    <h2>Visitor List</h2>
 
     <form action="/VisitorServlet" method="get" id="visitorForm" role="form" >
         <input type="hidden" id="idVisitor" name="idVisitor">
@@ -63,11 +31,10 @@
             <c:when test="${not empty visitorList}">
                 <table  class="table table-striped">
                     <tr>
-                        <td>Visitor ID: </td>
-                        <td>Visitor login: </td>
-                        <td>Visitor password: </td>
-                        <td>Visitor role: </td>
-                        <td>Visitor name: </td>
+                        <td><fmt:message key="admin.add.user.visitorID" bundle="${rb}"/>: </td>
+                        <td><fmt:message key="admin.add.user.visitor.login" bundle="${rb}"/>: </td>
+                        <td><fmt:message key="admin.add.user.visitor.password" bundle="${rb}"/>: </td>
+                        <td><fmt:message key="admin.add.user.visitor.name" bundle="${rb}"/>: </td>
                     </tr>
                     <c:forEach var="visitor" items="${visitorList}">
                         <c:set var="classSucess" value=""/>
@@ -75,41 +42,38 @@
                             <c:set var="classSucess" value="info"/>
                         </c:if>
                         <tr class="${classSucess}">
-                            <td>
-                                <a href="/VisitorServlet?idDriver=${visitor.visitorID}&searchAction=searchById">${visitor.visitorID}</a>
-                            </td>
                             <td>${visitor.visitorID}</td>
-                            <td>${visitor.login}</td>
+                            <td>${visitor.visitorLogin}</td>
                             <td>${visitor.visitorRole}</td>
                             <td>${visitor.visitorName}</td>
-                            <td><a href="#" id="remove"
-                                   onclick="document.getElementById('action').value = 'remove';document.getElementById('idVisitor').value = '${visitor.visitorID}';
+                            <td>
 
-                                           document.getElementById('visitorForm').submit();">
-                                <span class="glyphicon glyphicon-trash"/>
-                            </a>
+                            </td>
 
                             </td>
                         </tr>
                     </c:forEach>
                 </table>
             </c:when>
-            <c:otherwise>
-                <br>
-                <div class="alert alert-info">
-                    No visitor found matching your search criteria
-                </div>
-            </c:otherwise>
+
         </c:choose>
     </form>
     <br>
-        <a href="registerPage.jsp"><button type="submit" class="btn btn-primary btn-md">New Visitor</button>
-        <a href="adminMainPage.jsp"><button type="submit" class="btn btn-secondary btn-md">Back to main page</button></a>
+        <a href="/views/adminView/registerPage.jsp"><button type="submit" class="btn btn-primary btn-md"><fmt:message key="admin.new.visitor" bundle="${rb}"/></button>
+            <a href="/views/adminView/editVisitor.jsp"><button type="submit" class="btn btn-primary btn-md"><fmt:message key="admin.rdit.visitor" bundle="${rb}"/></button></a>
+            <a href="/views/adminView/deleteVisitor.jsp"><button type="submit" class="btn btn-secondary btn-md"><fmt:message key="admin.delete.visitor" bundle="${rb}"/></button></a>
             <br>
             <br>
-        <form action="${pageContext.request.contextPath}/LogoutServlet" method="post">
-            <button type="submit" class="btn btn-success btn-md">Logout</button>
-        </form> <a href="adminMainPage.jsp"></a>
+            <a href="/views/adminView/adminMainPage.jsp"><button type="submit" class="btn btn-secondary btn-md"><fmt:message key="back.to.main.page" bundle="${rb}"/></button></a>
+            <br><br>
+
+
+            <form action="${pageContext.request.contextPath}/VisitorServlet" method="post">
+                <button type="submit" class="btn btn-info"><fmt:message key="logout.button" bundle="${rb}"/></button>
+            </form>
+
+
+            <a href="adminMainPage.jsp"></a>
 
 
     <%@include file="/views/commonView/footer.jsp"%>

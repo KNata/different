@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class RouteDAOTest {
 
@@ -21,7 +22,7 @@ public class RouteDAOTest {
 
     @Test
     public void deleteRecord() throws SQLException {
-        assertTrue(routeDAO.deleteRecord("3"));
+        assertTrue(routeDAO.deleteRecord("4"));
     }
 
     @Test
@@ -39,4 +40,9 @@ public class RouteDAOTest {
         assertNotNull(routeDAO.findByName("Kyiv-Lviv"));
     }
 
+    @Test
+    public void showDriverInfo() {
+      //  routeDAO.setDriverID("Олексій Сукач");
+      //  assertNotNull(routeDAO.showDriverInfo());
+    }
 }

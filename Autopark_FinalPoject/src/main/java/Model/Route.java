@@ -10,11 +10,11 @@ public class Route {
     private String cityOfDeparture;
     private String cityOfArrival;
     private int routeDuration;
-    private Date departureTime;
-    private Date arrivalTime;
-
     private String driverID;
     private String busID;
+    private String departureTime;
+    private String arrivalTime;
+
 
     public int getRouteID() {
         return routeID;
@@ -36,21 +36,22 @@ public class Route {
         return routeDuration;
     }
 
-    public Date getRouteStartTime() {
+    public String getRouteStartTime() {
         return departureTime;
     }
 
-    public Date getRouteEndTime() {
+    public String getRouteEndTime() {
         return arrivalTime;
+    }
+
+    public String getBusID() {
+        return busID;
     }
 
     public String getDriverID() {
         return driverID;
     }
 
-    public String getBusID() {
-        return busID;
-    }
 
     public static Route.Builder newBuilder() {
         return new Route().new Builder();
@@ -74,22 +75,37 @@ public class Route {
 
     @Override
     public int hashCode() {
-        return Objects.hash(routeID, routeTitle, cityOfDeparture, cityOfArrival, routeDuration, departureTime, arrivalTime, driverID, busID);
+        return Objects.hash(routeID, routeTitle, cityOfDeparture, cityOfArrival, routeDuration, departureTime,
+                arrivalTime, driverID, busID);
     }
+
+//    @Override
+//    public String toString() {
+//        return "Route (" +
+//                "routeID = " + routeID +
+//                ", routeTitle = '" + routeTitle + '\'' +
+//                ", cityOfDeparture = '" + cityOfDeparture + '\'' +
+//                ", cityOfArrival = '" + cityOfArrival + '\'' +
+//                ", routeDuration = " + routeDuration +
+//                ", departureTime = " + departureTime +
+//                ", arrivalTime = " + arrivalTime +
+//                ')';
+//    }
+
 
     @Override
     public String toString() {
-        return "Route (" +
+        return "Route{" +
                 "routeID = " + routeID +
                 ", routeTitle = '" + routeTitle + '\'' +
                 ", cityOfDeparture = '" + cityOfDeparture + '\'' +
                 ", cityOfArrival = '" + cityOfArrival + '\'' +
                 ", routeDuration = " + routeDuration +
+                ", theDriver = " + driverID +
+                ", busID = " + busID +
                 ", departureTime = " + departureTime +
                 ", arrivalTime = " + arrivalTime +
-                ", driverID = " + driverID +
-                ", busID = " + busID +
-                ')';
+                '}';
     }
 
     public class Builder {
@@ -122,12 +138,12 @@ public class Route {
             return this;
         }
 
-        public Builder setRouteStartTime(Date aRouteStartTime) {
+        public Builder setRouteStartTime(String aRouteStartTime) {
             departureTime = aRouteStartTime;
             return this;
         }
 
-        public Builder setRouteEndTime(Date aRouteEndTime) {
+        public Builder setRouteEndTime(String aRouteEndTime) {
             arrivalTime = aRouteEndTime;
             return this;
         }
@@ -137,7 +153,7 @@ public class Route {
             return this;
         }
 
-        public Builder setBus(String aBusID) {
+        public Builder setBusID(String aBusID) {
             busID = aBusID;
             return this;
         }

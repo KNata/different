@@ -43,8 +43,7 @@ public class Driver {
 
     public class Builder {
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder setDriverID(String aDriverID) {
             driverID = aDriverID;

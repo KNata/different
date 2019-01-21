@@ -11,7 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,37 +21,27 @@ import java.util.regex.Pattern;
 @WebServlet(name = "VisitorServlet", urlPatterns = "/VisitorServlet")
     public class VisitorServlet extends HttpServlet {
 
-        private VisitorDAO visitorDAO = new VisitorDAO();
+    private static final long serialVersionUID = 1L;
+
+    private VisitorDAO visitorDAO = new VisitorDAO();
 
         protected void doGet(HttpServletRequest request, HttpServletResponse response)
                 throws ServletException, IOException {
-            String action = request.getParameter("searchAction");
-            if (action != null) {
-                switch (action) {
-                    case "searchById":
-                        searchVisitorByLogin(request, response);
-                        break;
-                }
-            }else{
-                ArrayList<Visitor> resultList = visitorDAO.findAll();
-                forwardListVisitors(request, response, resultList);
-            }
+            showAllVisitors(request, response);
+
         }
 
         protected void doPost(HttpServletRequest request, HttpServletResponse response)
                 throws ServletException, IOException {
-
+            showAllVisitors(request, response);
             String action = request.getParameter("action");
             System.out.println(action);
             switch (action) {
                 case "addNewVisitor":
                     addNewVisitor(request, response);
                     break;
-                case "remove":
+                case "removeVisitor":
                     deleteVisitor(request, response);
-                    break;
-                case "edit":
-                    editVisitor(request, response);
                     break;
                 case "editAdmin":
                     editVisitorAdmin(request, response);
@@ -58,11 +50,21 @@ import java.util.regex.Pattern;
 
         }
 
-        private void forwardListVisitors(HttpServletRequest request, HttpServletResponse response, ArrayList<Visitor> visitorList) throws IOException, ServletException {
-            String nextJSP = "/views/adminView/seeAllVisitorsPage.jsp";
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-            request.setAttribute("visitorList", visitorList);
-            dispatcher.forward(request, response);
+        private void showAllVisitors(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+            ArrayList<Visitor> visitorList = visitorDAO.findAll();
+            System.out.println(visitorList.size());
+            if (visitorList.size() == 0) {
+                System.out.println("1");
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/errorPage.jsp");
+                dispatcher.forward(request, response);
+                System.out.println("2");
+            } else {
+                System.out.println("3");
+                request.setAttribute("visitorList", visitorList);
+                System.out.println("4");
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/adminView/allVisitors.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         private void searchVisitorByLogin (HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -111,39 +113,37 @@ import java.util.regex.Pattern;
 
         private void deleteVisitor(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
             String visitorID = request.getParameter("visitorID");
-            boolean wasDeleted = visitorDAO.deleteRecord(visitorID);
-            if (wasDeleted) {
-                String message = "The visitor was successfully removed";
-                request.setAttribute("message", message);
-                ArrayList<Visitor> visitorList = visitorDAO.findAll();
-                forwardListVisitors(request, response, visitorList);
-            }
+            System.out.println("idVisitor " + visitorID);
+            boolean wasFound = visitorDAO.findByID(visitorID);
+            System.out.println("wasFound " + wasFound);
+           if (visitorID != null && wasFound) {
+                boolean wasDeleted = visitorDAO.deleteRecord(visitorID);
+                System.out.println("wasDeleted " + wasDeleted);
+                if (wasDeleted) {
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/successPage.jsp");
+                    dispatcher.forward(request, response);
+                } else {
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/errorPage.jsp");
+                    dispatcher.forward(request, response);
+                }
+            } else {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/errorPage.jsp");
+                dispatcher.forward(request, response);
+           }
         }
 
-        private void editVisitor(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-            String visitorLogin = request.getParameter("login");
-            String passwodToChange = request.getParameter("password");
 
-            boolean wasEdited = visitorDAO.update(visitorLogin, passwodToChange);
-            if (wasEdited) {
-                String message = "The visitor was successfully edited";
-                request.setAttribute("message", message);
-                ArrayList<Visitor> visitorList = visitorDAO.findAll();
-                forwardListVisitors(request, response, visitorList);
-            }
-        }
 
         private void editVisitorAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-            String visitorLogin = request.getParameter("login");
-            String passwodToChange = request.getParameter("password");
+            String visitorLogin = request.getParameter("visitorLogin");
+            String passwodToChange = request.getParameter("visitorPassword");
             String visitorRole = request.getParameter("visitorRole");
 
             boolean wasEdited = visitorDAO.updateForAdmin(visitorLogin, passwodToChange, visitorRole);
             if (wasEdited) {
-                String message = "The visitor was successfully edited";
-                request.setAttribute("message", message);
-                ArrayList<Visitor> visitorList = visitorDAO.findAll();
-                forwardListVisitors(request, response, visitorList);
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/adminView/adminMainPage.jsp");
+                dispatcher.forward(request, response);
+                System.out.println("done");
             }
         }
 }

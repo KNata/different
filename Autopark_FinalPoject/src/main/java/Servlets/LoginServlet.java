@@ -1,5 +1,6 @@
 package Servlets;
 
+import DAO.RouteDAO;
 import DAO.VisitorDAO;
 import Model.Visitor;
 
@@ -14,14 +15,15 @@ import java.io.PrintWriter;
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    public void doGet(HttpServletRequest request,
+                      HttpServletResponse response) throws ServletException, IOException {
+    }
 
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
-        // get request parameters for userID and password
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-
         VisitorDAO visitorDAO = new VisitorDAO();
         Visitor theVisitor = visitorDAO.findByLoginAndPassword(login, password);
         if(theVisitor != null) {
@@ -30,24 +32,20 @@ public class LoginServlet extends HttpServlet {
             System.out.println(theVisitor.getVisitorRole().equals(String.valueOf(Visitor.ROLE.ADMIN)));
             if (theVisitor.getVisitorRole().equals(String.valueOf(Visitor.ROLE.ADMIN))) {
                 session.setAttribute("admin", login);
-                Cookie userName = new Cookie("admin", login);
-                userName.setMaxAge(30*60);
-                response.addCookie(userName);
+                System.out.println(session.getAttribute("admin"));
                 response.sendRedirect("/views/adminView/adminMainPage.jsp");
             } else if (theVisitor.getVisitorRole().equals(String.valueOf(Visitor.ROLE.DRIVER))) {
                 session.setAttribute("driver", login);
-                Cookie userName = new Cookie("driver", login);
-                userName.setMaxAge(30*60);
-                response.addCookie(userName);
                 response.sendRedirect("/views/userView/driverMainPage.jsp");
 
             }
         }else{
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
+            response.sendRedirect("/index.jsp");
             PrintWriter out= response.getWriter();
             out.println("<font color=red>Either user name or password is wrong.</font>");
-            rd.include(request, response);
+
         }
+
 
     }
 

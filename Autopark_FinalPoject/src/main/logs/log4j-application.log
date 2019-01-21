@@ -1,0 +1,3 @@
+2019-01-19 00:23:00 ERROR DriverDAO:195 - Cannot create PoolableConnectionFactory (Unknown database 'mydb')
+2019-01-20 00:43:30 ERROR DriverDAO:331 - Parameter index out of range (6 > number of parameters, which is 5).
+2019-01-20 00:46:42 ERROR DriverDAO:331 - Parameter index out of range (6 > number of parameters, which is 5).

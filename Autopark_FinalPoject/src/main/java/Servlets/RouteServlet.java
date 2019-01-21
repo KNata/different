@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,23 +27,7 @@ public class RouteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("searchAction");
-        if (action != null) {
-            switch (action) {
-                case "searchById":
-                    searchDriverByID(request, response);
-                    break;
-                case "searchByName":
-                    searchRouteByName(request, response);
-                    break;
-                case "showAllRoutes":
-                    searchRouteByName(request, response);
-                    break;
-            }
-        }else{
-            ArrayList<Route> resultList = routeDAO.findAll();
-            forwardListRoute(request, response, resultList);
-        }
+        showAllRoutes(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -54,8 +39,8 @@ public class RouteServlet extends HttpServlet {
             case "addNewRoute":
                 addNewRoute(request, response);
                 break;
-            case "remove":
-                deleteDriver(request, response);
+            case "removeRoute":
+                deleteRoute(request, response);
                 break;
             case "edit":
                 editRoute(request, response);
@@ -70,14 +55,7 @@ public class RouteServlet extends HttpServlet {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/errorPage.jsp");
             dispatcher.forward(request, response);
         }
-        String nextJSP = "/views/adminView/seeAllDriversPage.jsp";
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        request.setAttribute("routeList", routeList);
-        dispatcher.forward(request, response);
-    }
-
-    private void forwardListRoute(HttpServletRequest request, HttpServletResponse response, ArrayList<Route> routeList) throws IOException, ServletException {
-        String nextJSP = "/views/adminView/seeAllDriversPage.jsp";
+        String nextJSP = "/views/adminView/seeAllRoutes.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
         request.setAttribute("routeList", routeList);
         dispatcher.forward(request, response);
@@ -93,16 +71,6 @@ public class RouteServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void searchRouteByName(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String routeName = request.getParameter("driverName");
-        Route theRoute = routeDAO.findByName(routeName);
-        request.setAttribute("route", theRoute);
-        request.setAttribute("action", "edit");
-        String nextJSP = "/adminView/addNewRoutePage.jsp";
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        dispatcher.forward(request, response);
-    }
 
     private void addNewRoute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String routeID = request.getParameter("idRoute");
@@ -123,12 +91,12 @@ public class RouteServlet extends HttpServlet {
             BusDAO busDAO = new BusDAO();
             DriverDAO driverDAO = new DriverDAO();
             if (busDAO.findByID(busID) != null && driverDAO.isDriverInSystem(driverID)) {
-                if(routeDAO.findByID(routeID) == null && (routeDAO.findByID(routeID).getRouteStartTime() != departureTimeInDateFormat) && (routeDAO.findByID(routeID).getDriverID() != driverID)) {
+                if(routeDAO.findByID(routeID) == null && (!routeDAO.findByID(routeID).getRouteStartTime().equals(departureTimeInDateFormat)) && (!routeDAO.findByID(routeID).getDriverID().equals(driverID))) {
                 Driver theDriver = driverDAO.findByID(driverID);
                 Bus theBus = busDAO.findByID(busID);
-                Route theRoute = Route.newBuilder().setRouteID(Integer.valueOf(routeID)).setRouteTitle(routeTitle).setBus(theBus.getBusID())
-                        .setDriver(theDriver.getDriverID()).setRouteBegin(cityOfDeparture).setRouteEnd(cityOfArrival)
-                        .setRouteDuration(Integer.valueOf(routeDuration)).setRouteStartTime(departureTimeInDateFormat).setRouteEndTime(arrivalTimeInDateFormat).build();
+                Route theRoute = Route.newBuilder().setRouteID(Integer.valueOf(routeID)).setRouteTitle(routeTitle).setBusID(busID)
+                        .setDriver(driverID).setRouteBegin(cityOfDeparture).setRouteEnd(cityOfArrival)
+                        .setRouteDuration(Integer.valueOf(routeDuration)).setRouteStartTime(departureTime).setRouteEndTime(arrivalTime).build();
                 boolean wasAdded = routeDAO.addRecord(theRoute);
                 if (wasAdded) {
                     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/successPage.jsp");
@@ -146,39 +114,79 @@ public class RouteServlet extends HttpServlet {
     }
 
 
-    private void deleteDriver(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String routeID = request.getParameter("routeID");
-        boolean wasDeleted = routeDAO.deleteRecord(routeID);
-        if (wasDeleted) {
-            String message = "The route was successfully removed";
-            request.setAttribute("message", message);
-            ArrayList<Route> routeList = routeDAO.findAll();
-            forwardListRoute(request, response, routeList);
+    private void deleteRoute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String routeID = request.getParameter("idRoute");
+        System.out.println("idRoute " + routeID);
+        if (routeID != null && routeDAO.findByID(routeID) != null) {
+            System.out.println("1");
+            boolean wasDeleted = routeDAO.deleteRecord(routeID);
+            System.out.println(wasDeleted + "was deleted");
+            if (wasDeleted) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/successPage.jsp");
+                dispatcher.forward(request, response);
+                PrintWriter out= response.getWriter();
+                out.println("<font color=red>Done.</font>");
+                dispatcher.include(request, response);
+            } else {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/errorPage.jsp");
+                dispatcher.forward(request, response);
+                PrintWriter out= response.getWriter();
+                out.println("<font color=red>Fail.</font>");
+                dispatcher.include(request, response);
+            }
+        } else {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/adminView/deleteVisitor.jsp");
+            dispatcher.forward(request, response);
+            PrintWriter out= response.getWriter();
+            out.println("<font color=red>Fail.</font>");
+            dispatcher.include(request, response);
         }
     }
 
     private void editRoute(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int routeID = Integer.valueOf(request.getParameter("routeID"));
-        String routeTitle = request.getParameter("routeTitle");
+        String routeID = request.getParameter("idRoute");
         String busID = request.getParameter("busID");
         String driverID = request.getParameter("driverID");
-        Date departureTime = Date.valueOf(request.getParameter("departureTime"));
-        Date arrivalTime = Date.valueOf(request.getParameter("arrivalTime"));
+        String departureTime = request.getParameter("departureTime");
+        String arrivalTime = request.getParameter("arrivalTime");
+        int duration = Integer.valueOf(request.getParameter("routeDuration"));
+
+        System.out.println("Route ID " + routeID);
+        System.out.println("Bus ID " + busID);
+        System.out.println("Driver ID " + driverID);
+        System.out.println("departureTime " + departureTime);
+        System.out.println("arrivalTime " + arrivalTime);
+        System.out.println("duration " + duration);
 
         BusDAO busDAO = new BusDAO();
         DriverDAO driverDAO = new DriverDAO();
-
-        boolean wasUpdated = routeDAO.update(routeID, driverID, busID, departureTime, arrivalTime);
-        String message = null;
-        if (wasUpdated) {
-             message = "The route has been  updated successfully";
+        if (routeID != null && busID != null && driverID != null && departureTime != null && arrivalTime != null
+                && duration != 0 && busDAO.findByID(busID) != null && driverDAO.findByID(driverID) != null && routeDAO.findByID(routeID) != null) {
+            boolean wasUpdated = routeDAO.update(Integer.valueOf(routeID), driverID, busID, departureTime, arrivalTime, duration);
+            System.out.println(wasUpdated);
+            if (wasUpdated) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/successPage.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/errorPage.jsp");
+                dispatcher.forward(request, response);
+                System.out.println("Error because update procedure was failed");
+            }
+        } else {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/commonView/errorPage.jsp");
+            dispatcher.forward(request, response);
+            System.out.println("Error inside verification block");
         }
-        ArrayList<Route> employeeList = routeDAO.findAll();
-        request.setAttribute("idRoute", routeID);
-        request.setAttribute("message", message);
-        forwardListRoute(request, response, employeeList);
+}
+
+    private void showDriverStory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        ArrayList<Route> driverStoryList = routeDAO.showDriverInfo();
+        System.out.println(driverStoryList.size());
+        request.setAttribute("routeStoryList", driverStoryList);
     }
+
 
     private java.sql.Date convertDate (String stringToConvert) {
         java.sql.Date resultDate = null;

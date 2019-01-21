@@ -256,7 +256,7 @@ public class BusDAO implements AbstractDAO<String, Bus> {
     public boolean update(String busID, int milesToChange, boolean passedServiceToChange) {
         String updateSQL = "update `mydb`.`Bus` set  maintance = ?, miles = ? where busID = ?";
         boolean wasUpdated = false;
-        if (milesToChange == this.findByID(busID).getMiles() || passedServiceToChange == this.findByID(busID).isPassedService() && milesToChange >= this.findByID(busID).getMiles()) {
+        if (milesToChange == findByID(busID).getMiles() || passedServiceToChange == findByID(busID).isPassedService() && milesToChange >= findByID(busID).getMiles()) {
             return wasUpdated = false;
         }
         Connection connection = null;

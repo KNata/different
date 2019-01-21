@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -27,26 +28,18 @@ public class DriverServlet extends HttpServlet {
         theLogger = Logger.getLogger(DriverServlet.class);
     }
 
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // String action = request.getParameter("searchAction");
-       // if (action != null) {
-//            switch (action) {
-//                case "searchById":
-//                    searchDriverByID(request, response);
-//                    break;
-//                case "searchByName":
-//                    searchDriverByName(request, response);
-//                    break;
-//            }
-//
-        DriverDAO driverDAO = new DriverDAO();
-        ArrayList<Driver> allDriversList = driverDAO.findAll();
-        System.out.println(allDriversList.size());
-        request.setAttribute("driverList", allDriversList);
-        request.getRequestDispatcher("/adminView/seeAllDriversPage.jsp").forward(request, response);
+
+        PrintWriter out = response.getWriter();
+        //out.println("Hello in Get Method");
+
+            fullListOfDrivers(request, response);
+
     }
 
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -66,10 +59,7 @@ public class DriverServlet extends HttpServlet {
     }
 
     public void fullListOfDrivers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Driver> driverList = driverDAO.findAll();
-        for(int i = 0; i < driverList.size(); i++) {
-            System.out.println(driverList.get(i).toString());
-        }
+        ArrayList<Driver> driverList = driverDAO.findAll();
         System.out.println(driverList.size());
         if (driverList.size() == 0) {
             System.out.println("1");
@@ -78,10 +68,9 @@ public class DriverServlet extends HttpServlet {
             System.out.println("2");
         } else {
             System.out.println("3");
-            String nextJSP = "/views/adminView/seeAllDriversPage.jsp";
             request.setAttribute("driverList", driverList);
             System.out.println("4");
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/adminView/seeAllDrivers.jsp");
             dispatcher.forward(request, response);
         }
     }
@@ -149,5 +138,9 @@ public class DriverServlet extends HttpServlet {
             ArrayList<Driver> driverList = driverDAO.findAll();
             forwardListDrivers(request, response, driverList);
         }
+    }
+
+    private void showDriverProfile() {
+
     }
 }
